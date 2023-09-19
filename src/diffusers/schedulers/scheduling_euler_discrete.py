@@ -351,18 +351,18 @@ class EulerDiscreteScheduler(SchedulerMixin, ConfigMixin):
                 ),
             )
 
-        if not self.is_scale_input_called:
-            logger.warning(
-                "The `scale_model_input` function should be called before `step` to ensure correct denoising. "
-                "See `StableDiffusionPipeline` for a usage example."
-            )
+        # if not self.is_scale_input_called:
+        #     logger.warning(
+        #         "The `scale_model_input` function should be called before `step` to ensure correct denoising. "
+        #         "See `StableDiffusionPipeline` for a usage example."
+        #     )
 
-        if isinstance(timestep, torch.Tensor):
-            timestep = timestep.to(self.timesteps.device)
+        # if isinstance(timestep, torch.Tensor):
+        #     timestep = timestep.to(self.timesteps.device)
 
         sigma = self.sigmas[step_index]
 
-        gamma = min(s_churn / (len(self.sigmas) - 1), 2**0.5 - 1) if s_tmin <= sigma <= s_tmax else 0.0
+        gamma = min(s_churn / (len(self.sigmas) - 1), 2**0.5 - 1) if s_tmin <= sigma[0] <= s_tmax else 0.0
 
         noise = randn_tensor(
             model_output.shape, dtype=model_output.dtype, device=model_output.device, generator=generator
